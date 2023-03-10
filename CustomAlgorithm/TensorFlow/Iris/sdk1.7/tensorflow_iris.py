@@ -47,15 +47,15 @@ def model(x_train, y_train, x_test, y_test):
 def _load_data(file_path, channel):
     # Take the set of files and read them all into a single pandas dataframe
     input_files = [ os.path.join(file_path, file) for file in os.listdir(file_path) ]
-    if len(input_files) == 0:
+    if not input_files:
         raise ValueError(('There are no files in {}.\n' +
                           'This usually indicates that the channel ({}) was incorrectly specified,\n' +
                           'the data specification in S3 was incorrectly specified or the role specified\n' +
                           'does not have permission to access the data.').format(file_path, channel))
-        
+
     raw_data = [ pd.read_csv(file, header=None, engine="python") for file in input_files ]
     df = pd.concat(raw_data)  
-    
+
     features = df.iloc[:,1:].values
     label = df.iloc[:,0].values
     return features, label
